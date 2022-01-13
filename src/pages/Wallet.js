@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { addExpenseAction, fetchCurrencies, updateTotal } from '../actions';
+import {
+  addExpenseAction, fetchCurrencies, updateTotal as updateTotalAction } from '../actions';
 
 class Wallet extends React.Component {
   constructor() {
     super();
 
-    this.state = {
+    this.initialState = {
       totalExpenses: 0,
       currencies: [],
       value: '',
@@ -16,6 +17,8 @@ class Wallet extends React.Component {
       method: 'Dinheiro',
       tag: 'Alimentação',
     };
+
+    this.state = this.initialState;
   }
 
     componentDidMount = () => {
@@ -41,9 +44,9 @@ class Wallet extends React.Component {
     this.setState({ totalExpenses: total });
   }
 
-  updateTotal = async () => {
+  updateTotalExpense = async () => {
     const { expenses, updateTotal } = this.props;
-    console.log('updateTotal runnig ', expenses);
+    // console.log('updateTotal runnig ', expenses);
 
     const total = expenses
       .reduce((acc, expense) => (
@@ -84,13 +87,7 @@ class Wallet extends React.Component {
       // exchangeRates,
     });
 
-    this.setState({
-      value: '',
-      description: '',
-      currency: 'USD',
-      method: 'Dinheiro',
-      tag: 'Alimentação',
-    }, () => this.updateTotal());
+    this.setState(this.initialState, () => this.updateTotalExpense());
   }
 
   handleChange = (event) => {
@@ -112,7 +109,6 @@ class Wallet extends React.Component {
         <header>
           <span data-testid="email-field">{ `Email: ${email}` }</span>
 
-          {/* <span data-testid="total-field">{`Despesa Total: ${totalExpenses}`}</span> */}
           <span data-testid="total-field">{totalExpenses}</span>
           <span data-testid="header-currency-field">{gambi2}</span>
         </header>
@@ -204,12 +200,14 @@ Wallet.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
   addExpense: PropTypes.func.isRequired,
   fetchData: PropTypes.func.isRequired,
+  total: PropTypes.number.isRequired,
+  updateTotal: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
   addExpense: (expense) => dispatch(addExpenseAction(expense)),
   fetchData: () => dispatch(fetchCurrencies()),
-  updateTotal: (total) => dispatch(updateTotal(total)),
+  updateTotal: (total) => dispatch(updateTotalAction(total)),
 });
 
 const mapStateToProps = (state) => ({

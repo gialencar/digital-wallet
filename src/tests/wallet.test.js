@@ -153,7 +153,7 @@ describe('4 - Desenvolva um formulário para adicionar uma despesa contendo as s
     await waitFor(() => {
       expect(valueInput.value === 0 || valueInput.value === '0' || valueInput.value === '').toBe(true);
     });
-    console.log(store.getState().wallet.expenses)
+
     expect(store.getState().wallet.expenses).toStrictEqual(expectedStateExpense);
 
     userEvent.type(valueInput, '20');

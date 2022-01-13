@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { removeExpense } from '../actions';
 
 class Table extends Component {
+  // TODO: mudar forma de atribuir id
   render() {
-    const { expenses } = this.props;
-    console.log();
+    const { expenses, expenseRemove } = this.props;
 
     return (
       <table>
@@ -32,7 +33,17 @@ class Table extends Component {
               <td>Real</td>
               <td>{(+exp.exchangeRates[exp.currency].ask).toFixed(2)}</td>
               <td>{(exp.exchangeRates[exp.currency].ask * exp.value).toFixed(2)}</td>
-              <td>{ exp.exchangeRates[exp.currency].name.split('/')[0] }</td>
+              <td>{exp.exchangeRates[exp.currency].name.split('/')[0]}</td>
+              <td>
+                <button
+                  type="button"
+                  data-testid="delete-btn"
+                  onClick={ () => expenseRemove(exp.id) }
+                >
+                  Remover
+
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -43,10 +54,15 @@ class Table extends Component {
 
 Table.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
+  expenseRemove: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   expenses: state.wallet.expenses,
 });
 
-export default connect(mapStateToProps)(Table);
+const mapDispatchToProps = (dispatch) => ({
+  expenseRemove: (id) => dispatch(removeExpense(id)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Table);

@@ -4,6 +4,7 @@ export const LOGIN = 'LOGIN';
 export const ADD_EXPENSE = 'ADD_EXPENSE';
 export const FETCH_CURRENCIES = 'FETCH_CURRENCIES';
 export const UPDATE_TOTAL = 'UPDATE_TOTAL';
+export const REMOVE_EXPENSE = 'REMOVE_EXPENSE';
 
 export const loginAction = (email) => ({
   type: LOGIN,
@@ -35,3 +36,8 @@ export function fetchCurrenciesAction() {
     });
   };
 }
+
+export const removeExpense = (payload) => ({
+  type: REMOVE_EXPENSE,
+  payload,
+});

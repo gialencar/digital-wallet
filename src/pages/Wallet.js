@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { addExpenseAction, fetchCurrenciesAction, updateTotal as updateTotalAction }
 from '../actions';
+import Header from '../components/Header';
 
 class Wallet extends React.Component {
   constructor() {
@@ -17,7 +18,6 @@ class Wallet extends React.Component {
     };
 
     this.state = {
-      totalExpenses: 0,
       currencies: [],
       ...this.formState,
     };
@@ -35,12 +35,6 @@ class Wallet extends React.Component {
       currencies: currencies
         .filter((cur) => cur !== 'USDT'),
     });
-  }
-
-  getTotalExpenses = () => {
-    const { total } = this.props;
-    console.log('total:', total);
-    this.setState({ totalExpenses: total });
   }
 
   updateTotalExpense = async () => {
@@ -70,7 +64,7 @@ class Wallet extends React.Component {
     this.setState((state) => ({
       ...state,
       ...this.formState,
-    }), () => this.updateTotalExpense());
+    }));
   }
 
   handleChange = (event) => {
@@ -81,19 +75,13 @@ class Wallet extends React.Component {
   }
 
   render() {
-    const { email } = this.props;
     const {
-      currencies, value, description, currency, method, tag, totalExpenses } = this.state;
+      currencies, value, description, currency, method, tag } = this.state;
 
     return (
       // TODO: separar em componentes
       <>
-        <header>
-          <span data-testid="email-field">{ `Email: ${email}` }</span>
-
-          <span data-testid="total-field">{totalExpenses}</span>
-          <span data-testid="header-currency-field">BRL</span>
-        </header>
+        <Header />
 
         <form>
           <label htmlFor="value">
@@ -177,12 +165,10 @@ class Wallet extends React.Component {
 }
 
 Wallet.propTypes = {
-  email: PropTypes.string.isRequired,
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
   expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
   addExpense: PropTypes.func.isRequired,
   fetchData: PropTypes.func.isRequired,
-  total: PropTypes.number.isRequired,
   updateTotal: PropTypes.func.isRequired,
 };
 
@@ -193,10 +179,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  email: state.user.email,
   wallet: state.wallet,
   expenses: state.wallet.expenses,
-  total: state.wallet.total,
   currencies: state.wallet.currencies,
 });
 

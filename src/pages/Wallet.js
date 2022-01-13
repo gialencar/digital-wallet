@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { addExpenseAction, fetchCurrenciesAction, updateTotal as updateTotalAction }
 from '../actions';
 import Header from '../components/Header';
+import Table from '../components/Table';
 
 class Wallet extends React.Component {
   constructor() {
@@ -159,6 +160,8 @@ class Wallet extends React.Component {
 
           <button type="button" onClick={ this.addExpense }>Adicionar despesa</button>
         </form>
+
+        <Table />
       </>
     );
   }

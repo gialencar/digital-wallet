@@ -11,10 +11,16 @@ export const loginAction = (email) => ({
   payload: email,
 });
 
-export const addExpenseAction = (expenses) => ({
-  type: ADD_EXPENSE,
-  payload: expenses,
-});
+export function addExpenseAction(expenses) {
+  return async (dispatch) => {
+    const response = await fetch('https://economia.awesomeapi.com.br/json/all');
+    const data = await response.json();
+    dispatch({
+      type: ADD_EXPENSE,
+      payload: { ...expenses, exchangeRates: data },
+    });
+  };
+}
 
 export const fetchCurrenciesSuccess = (currencies) => ({
   type: FETCH_CURRENCIES_SUCCESS,
@@ -36,10 +42,13 @@ export function fetchCurrencies() {
     try {
       const response = await fetch('https://economia.awesomeapi.com.br/json/all');
       const data = await response.json();
+      // console.log(Object.keys(data));
       // const currencies = Object.keys(data).filter((key) => key !== 'USDT');
       // dispatch(fetchCurrenciesSuccess(currencies));
-      // const currencies = Object.keys(data).map((key) => data[key]);
-      dispatch(fetchCurrenciesSuccess(data));
+      const currencies = Object.keys(data);
+      // .filter((key) => key !== 'USDT')
+      // .map((key) => data[key]);
+      dispatch(fetchCurrenciesSuccess(currencies));
     } catch (error) {
       dispatch(fetchCurrenciesFailure(error));
     }

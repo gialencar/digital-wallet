@@ -13,6 +13,7 @@ const INITIAL_STATE = {
 const walletReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case ADD_EXPENSE:
+    // console.log('123123213', action.payload);
     return {
       ...state,
       expenses: [...state.expenses, action.payload],

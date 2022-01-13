@@ -1,9 +1,8 @@
-// Coloque aqui suas actions
+import fetchCurrencies from '../api';
+
 export const LOGIN = 'LOGIN';
 export const ADD_EXPENSE = 'ADD_EXPENSE';
-// export const FETCH_CURRENCIES_BEGIN = 'FETCH_CURRENCIES_BEGIN';
-export const FETCH_CURRENCIES_SUCCESS = 'FETCH_CURRENCIES_SUCCESS';
-export const FETCH_CURRENCIES_FAILURE = 'FETCH_CURRENCIES_FAILURE';
+export const FETCH_CURRENCIES = 'FETCH_CURRENCIES';
 export const UPDATE_TOTAL = 'UPDATE_TOTAL';
 
 export const loginAction = (email) => ({
@@ -13,8 +12,7 @@ export const loginAction = (email) => ({
 
 export function addExpenseAction(expenses) {
   return async (dispatch) => {
-    const response = await fetch('https://economia.awesomeapi.com.br/json/all');
-    const data = await response.json();
+    const data = await fetchCurrencies();
     dispatch({
       type: ADD_EXPENSE,
       payload: { ...expenses, exchangeRates: data },
@@ -22,35 +20,18 @@ export function addExpenseAction(expenses) {
   };
 }
 
-export const fetchCurrenciesSuccess = (currencies) => ({
-  type: FETCH_CURRENCIES_SUCCESS,
-  payload: currencies,
-});
-
-export const fetchCurrenciesFailure = (error) => ({
-  type: FETCH_CURRENCIES_FAILURE,
-  payload: { error },
-});
-
 export const updateTotal = (value) => ({
   type: UPDATE_TOTAL,
   payload: value,
 });
 
-export function fetchCurrencies() {
+export function fetchCurrenciesAction() {
   return async (dispatch) => {
-    try {
-      const response = await fetch('https://economia.awesomeapi.com.br/json/all');
-      const data = await response.json();
-      // console.log(Object.keys(data));
-      // const currencies = Object.keys(data).filter((key) => key !== 'USDT');
-      // dispatch(fetchCurrenciesSuccess(currencies));
-      const currencies = Object.keys(data);
-      // .filter((key) => key !== 'USDT')
-      // .map((key) => data[key]);
-      dispatch(fetchCurrenciesSuccess(currencies));
-    } catch (error) {
-      dispatch(fetchCurrenciesFailure(error));
-    }
+    const data = await fetchCurrencies();
+    const currencies = Object.keys(data);
+    dispatch({
+      type: FETCH_CURRENCIES,
+      payload: currencies,
+    });
   };
 }

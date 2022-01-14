@@ -5,6 +5,7 @@ export const ADD_EXPENSE = 'ADD_EXPENSE';
 export const FETCH_CURRENCIES = 'FETCH_CURRENCIES';
 export const UPDATE_TOTAL = 'UPDATE_TOTAL';
 export const REMOVE_EXPENSE = 'REMOVE_EXPENSE';
+export const START_EXPENSE_EDIT = 'START_EXPENSE_EDIT';
 
 export const loginAction = (email) => ({
   type: LOGIN,
@@ -21,11 +22,6 @@ export function addExpenseAction(expenses) {
   };
 }
 
-export const updateTotal = (value) => ({
-  type: UPDATE_TOTAL,
-  payload: value,
-});
-
 export function fetchCurrenciesAction() {
   return async (dispatch) => {
     const data = await fetchCurrencies();
@@ -37,7 +33,12 @@ export function fetchCurrenciesAction() {
   };
 }
 
-export const removeExpense = (payload) => ({
+export const removeExpense = (id) => ({
   type: REMOVE_EXPENSE,
-  payload,
+  payload: id,
+});
+
+export const editExpenseAction = (id) => ({
+  type: START_EXPENSE_EDIT,
+  payload: id,
 });

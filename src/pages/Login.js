@@ -28,10 +28,8 @@ class Login extends React.Component {
     const minPasswordLenght = 6;
     const isEmailValid = !!email.match(emailFormat);
     const isPasswordValid = password.length >= minPasswordLenght;
-    // console.log(isEmailValid, isPasswordValid);
     if (isEmailValid && isPasswordValid) {
       this.setState({ loginBtnDisabled: false }, () => {
-        // console.log('Form validated!');
       });
     } else {
       this.setState({ loginBtnDisabled: true });

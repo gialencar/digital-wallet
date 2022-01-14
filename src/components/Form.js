@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { addExpenseAction, fetchCurrenciesAction, updateTotal as updateTotalAction }
+import { addExpenseAction, fetchCurrenciesAction }
 from '../actions';
 
 class Form extends Component {
@@ -30,21 +30,14 @@ class Form extends Component {
     const { fetchData } = this.props;
     await fetchData();
     const { currencies } = this.props;
-    this.setState({
-      currencies: currencies
-        .filter((cur) => cur !== 'USDT'),
-    });
+    this.setState({ currencies: currencies.filter((cur) => cur !== 'USDT') });
   }
 
-  updateTotalExpense = async () => {
-    const { expenses, updateTotal } = this.props;
-    const total = expenses
-      .reduce((acc, expense) => (
-        acc + +expense.value * expense.exchangeRates[expense.currency].ask),
-      0).toFixed(2);
-
-    await updateTotal(total);
-    this.setState({ totalExpenses: total });
+  resetForm = () => {
+    this.setState((state) => ({
+      ...state,
+      ...this.formState,
+    }));
   }
 
   addExpense = async () => {
@@ -60,10 +53,7 @@ class Form extends Component {
       description,
     });
 
-    this.setState((state) => ({
-      ...state,
-      ...this.formState,
-    }));
+    this.resetForm();
   }
 
   handleChange = (event) => {
@@ -163,13 +153,11 @@ Form.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.object).isRequired,
   addExpense: PropTypes.func.isRequired,
   fetchData: PropTypes.func.isRequired,
-  updateTotal: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
   addExpense: (expense) => dispatch(addExpenseAction(expense)),
   fetchData: () => dispatch(fetchCurrenciesAction()),
-  updateTotal: (total) => dispatch(updateTotalAction(total)),
 });
 
 const mapStateToProps = (state) => ({

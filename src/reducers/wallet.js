@@ -1,12 +1,17 @@
 import {
-  ADD_EXPENSE, FETCH_CURRENCIES, REMOVE_EXPENSE, START_EXPENSE_EDIT,
+  ADD_EXPENSE, FETCH_CURRENCIES, FINISH_EDIT, REMOVE_EXPENSE, START_EXPENSE_EDIT,
 } from '../actions';
 
 const INITIAL_STATE = {
   currencies: [],
   expenses: [],
-  editingExpense: false,
+  isEditingExpense: false,
+  editingId: '',
 };
+
+const removeExp = (expenses, id) => (
+  expenses.filter((exp) => exp.id !== id)
+);
 
 const walletReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -35,7 +40,17 @@ const walletReducer = (state = INITIAL_STATE, action) => {
   case START_EXPENSE_EDIT:
     return {
       ...state,
-      editingExpense: true,
+      isEditingExpense: !state.isEditingExpense,
+      editingId: action.payload,
+    };
+
+  case FINISH_EDIT:
+    return {
+      ...state,
+      isEditingExpense: !state.isEditingExpense,
+      expenses: [
+        ...removeExp(state.expenses, state.editingId), action.payload]
+        .sort((a, b) => a.id - b.id),
     };
 
   default:

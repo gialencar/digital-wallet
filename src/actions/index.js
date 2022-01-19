@@ -6,6 +6,7 @@ export const FETCH_CURRENCIES = 'FETCH_CURRENCIES';
 export const UPDATE_TOTAL = 'UPDATE_TOTAL';
 export const REMOVE_EXPENSE = 'REMOVE_EXPENSE';
 export const START_EXPENSE_EDIT = 'START_EXPENSE_EDIT';
+export const FINISH_EDIT = 'FINISH_EDIT';
 
 export const loginAction = (email) => ({
   type: LOGIN,
@@ -41,4 +42,9 @@ export const removeExpense = (id) => ({
 export const editExpenseAction = (id) => ({
   type: START_EXPENSE_EDIT,
   payload: id,
+});
+
+export const finishExpenseEditAction = (payload) => ({
+  type: FINISH_EDIT,
+  payload,
 });
